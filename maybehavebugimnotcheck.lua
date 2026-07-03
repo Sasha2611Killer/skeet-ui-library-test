@@ -2796,7 +2796,7 @@ end
 
 							-- Проверяем клик по палитре
 							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
-								Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y and 
+								Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y) and 
 								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
 								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y
 
