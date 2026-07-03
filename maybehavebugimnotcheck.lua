@@ -2792,27 +2792,19 @@ end
 						if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
 							local Mouse = utility:MouseLocation()
 
-							-- Получаем глобальные позиции кнопки
-							local btnAbsPos = Content_Holder.AbsolutePosition
-							local btnAbsSize = Content_Holder.AbsoluteSize
+							-- Проверяем, кликнули ли по кнопке Colorpicker
+							local onButton = Mouse.X >= Content_Holder.AbsolutePosition.X and 
+								Mouse.Y >= Content_Holder.AbsolutePosition.Y and 
+								Mouse.X <= Content_Holder.AbsolutePosition.X + Content_Holder.AbsoluteSize.X and 
+								Mouse.Y <= Content_Holder.AbsolutePosition.Y + Content_Holder.AbsoluteSize.Y
 
-							-- Получаем глобальные позиции палитры (через Open_Holder_Outline, который самый внешний)
-							local palAbsPos = Open_Holder_Outline.AbsolutePosition
-							local palAbsSize = Open_Holder_Outline.AbsoluteSize
+							-- Проверяем, кликнули ли по палитре (с запасом 5 пикселей сверху и снизу)
+							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
+								Mouse.Y >= Content_Open_Holder.AbsolutePosition.Y - 5 and 
+								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
+								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 5
 
-							-- Проверяем клик по кнопке (с запасом 5 пикселей)
-							local onButton = Mouse.X >= btnAbsPos.X - 5 and 
-								Mouse.Y >= btnAbsPos.Y - 5 and 
-								Mouse.X <= btnAbsPos.X + btnAbsSize.X + 5 and 
-								Mouse.Y <= btnAbsPos.Y + btnAbsSize.Y + 5
-
-							-- Проверяем клик по палитре (с запасом 10 пикселей)
-							local onPalette = Mouse.X >= palAbsPos.X - 10 and 
-								Mouse.Y >= palAbsPos.Y - 10 and 
-								Mouse.X <= palAbsPos.X + palAbsSize.X + 10 and 
-								Mouse.Y <= palAbsPos.Y + palAbsSize.Y + 10
-
-							-- Если клик НЕ по кнопке И НЕ по палитре
+							-- Закрываем ТОЛЬКО если клик НЕ по кнопке И НЕ по палитре
 							if not onButton and not onPalette then
 								Content.Section:CloseContent()
 							end
