@@ -1166,383 +1166,414 @@ end
 			return Content
 		end
 		--
-		function sections:CreateDropdown(Properties)
-			Properties = Properties or {}
+	function sections:CreateDropdown(Properties)
+		Properties = Properties or {}
+		--
+		local Content = {
+			Name = (Properties.name or Properties.Name or Properties.title or Properties.Title or "New Dropdown"),
+			State = (Properties.state or Properties.State or Properties.def or Properties.Def or Properties.default or Properties.Default or 1),
+			Options = (Properties.options or Properties.Options or Properties.list or Properties.List or {1, 2, 3}),
+			Callback = (Properties.callback or Properties.Callback or Properties.callBack or Properties.CallBack or function() end),
+			Content = {
+				Open = false
+			},
+			Window = self.Window,
+			Page = self.Page,
+			Section = self
+		}
+		--
+		do
+			local Content_Holder = utility:RenderObject("Frame", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content.Section.Holder,
+				Size = UDim2.new(1, 0, 0, 34 + 5),
+				ZIndex = 3
+			})
+			-- //
+			local Content_Holder_Outline = utility:RenderObject("Frame", {
+				BackgroundColor3 = Color3.fromRGB(12, 12, 12),
+				BackgroundTransparency = 0,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Position = UDim2.new(0, 40, 0, 15),
+				Size = UDim2.new(1, -98, 0, 20),
+				ZIndex = 3
+			})
 			--
-			local Content = {
-				Name = (Properties.name or Properties.Name or Properties.title or Properties.Title or "New Dropdown"),
-				State = (Properties.state or Properties.State or Properties.def or Properties.Def or Properties.default or Properties.Default or 1),
-				Options = (Properties.options or Properties.Options or Properties.list or Properties.List or {1, 2, 3}),
-				Callback = (Properties.callback or Properties.Callback or Properties.callBack or Properties.CallBack or function() end),
-				Content = {
-					Open = false
-				},
-				Window = self.Window,
-				Page = self.Page,
-				Section = self
-			}
+			local Content_Holder_Title = utility:RenderObject("TextLabel", {
+				AnchorPoint = Vector2.new(0, 0),
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Position = UDim2.new(0, 41, 0, 4),
+				Size = UDim2.new(1, -41, 0, 10),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text = Content.Name,
+				TextColor3 = Color3.fromRGB(205, 205, 205),
+				TextSize = 9,
+				TextStrokeTransparency = 1,
+				TextXAlignment = "Left"
+			})
 			--
-			do
-				local Content_Holder = utility:RenderObject("Frame", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content.Section.Holder,
-					Size = UDim2.new(1, 0, 0, 34 + 5),
-					ZIndex = 3
-				})
-				-- //
-				local Content_Holder_Outline = utility:RenderObject("Frame", {
-					BackgroundColor3 = Color3.fromRGB(12, 12, 12),
-					BackgroundTransparency = 0,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Position = UDim2.new(0, 40, 0, 15),
-					Size = UDim2.new(1, -98, 0, 20),
-					ZIndex = 3
-				})
-				--
-				local Content_Holder_Title = utility:RenderObject("TextLabel", {
-					AnchorPoint = Vector2.new(0, 0),
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Position = UDim2.new(0, 41, 0, 4),
-					Size = UDim2.new(1, -41, 0, 10),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text = Content.Name,
-					TextColor3 = Color3.fromRGB(205, 205, 205),
-					TextSize = 9,
-					TextStrokeTransparency = 1,
-					TextXAlignment = "Left"
-				})
-				--
-				local Content_Holder_Title2 = utility:RenderObject("TextLabel", {
-					AnchorPoint = Vector2.new(0, 0),
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Position = UDim2.new(0, 41, 0, 4),
-					Size = UDim2.new(1, -41, 0, 10),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text = Content.Name,
-					TextColor3 = Color3.fromRGB(205, 205, 205),
-					TextSize = 9,
-					TextStrokeTransparency = 1,
-					TextTransparency = 0.5,
-					TextXAlignment = "Left"
-				})
-				--
-				local Content_Holder_Button = utility:RenderObject("TextButton", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Size = UDim2.new(1, 0, 1, 0),
-					Text = ""
-				})
-				-- //
-				local Holder_Outline_Frame = utility:RenderObject("Frame", {
-					BackgroundColor3 = Color3.fromRGB(36, 36, 36),
-					BackgroundTransparency = 0,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder_Outline,
-					Position = UDim2.new(0, 1, 0, 1),
-					Size = UDim2.new(1, -2, 1, -2),
-					ZIndex = 3
-				})
-				-- //
-				local Outline_Frame_Gradient = utility:RenderObject("UIGradient", {
-					Color = ColorSequence.new(Color3.fromRGB(255, 255, 255), Color3.fromRGB(220, 220, 220)),
-					Enabled = true,
-					Rotation = 270,
-					Parent = Holder_Outline_Frame
-				})
-				--
-				local Outline_Frame_Title = utility:RenderObject("TextLabel", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Holder_Outline_Frame,
-					Position = UDim2.new(0, 8, 0, 0),
-					Size = UDim2.new(1, 0, 1, 0),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text = "",
-					TextColor3 = Color3.fromRGB(155, 155, 155),
-					TextSize = 9,
-					TextStrokeTransparency = 1,
-					TextXAlignment = "Left"
-				})
-				--
-				local Outline_Frame_Title2 = utility:RenderObject("TextLabel", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Holder_Outline_Frame,
-					Position = UDim2.new(0, 8, 0, 0),
-					Size = UDim2.new(1, 0, 1, 0),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text = "",
-					TextColor3 = Color3.fromRGB(155, 155, 155),
-					TextSize = 9,
-					TextStrokeTransparency = 1,
-					TextTransparency = 0,
-					TextXAlignment = "Left"
-				})
-				--
-				local Outline_Frame_Arrow = utility:RenderObject("ImageLabel", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Holder_Outline_Frame,
-					Position = UDim2.new(1, -11, 0.5, -4),
-					Size = UDim2.new(0, 7, 0, 6),
-					Image = "rbxassetid://8532000591",
-					ImageColor3 = Color3.fromRGB(255, 255, 255),
-					ZIndex = 3
-				})
-				--
-				do -- // Functions
-					function Content:Set(state)
-						Content.State = state
-						--
-						Outline_Frame_Title.Text = Content.Options[Content:Get()]
-						Outline_Frame_Title2.Text = Content.Options[Content:Get()]
-						--
-						Content.Callback(Content:Get())
-						--
-						if Content.Content.Open then
-							Content.Content:Refresh(Content:Get())
-						end
-					end
+			local Content_Holder_Title2 = utility:RenderObject("TextLabel", {
+				AnchorPoint = Vector2.new(0, 0),
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Position = UDim2.new(0, 41, 0, 4),
+				Size = UDim2.new(1, -41, 0, 10),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text = Content.Name,
+				TextColor3 = Color3.fromRGB(205, 205, 205),
+				TextSize = 9,
+				TextStrokeTransparency = 1,
+				TextTransparency = 0.5,
+				TextXAlignment = "Left"
+			})
+			--
+			local Content_Holder_Button = utility:RenderObject("TextButton", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Size = UDim2.new(1, 0, 1, 0),
+				Text = ""
+			})
+			-- //
+			local Holder_Outline_Frame = utility:RenderObject("Frame", {
+				BackgroundColor3 = Color3.fromRGB(36, 36, 36),
+				BackgroundTransparency = 0,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder_Outline,
+				Position = UDim2.new(0, 1, 0, 1),
+				Size = UDim2.new(1, -2, 1, -2),
+				ZIndex = 3
+			})
+			-- //
+			local Outline_Frame_Gradient = utility:RenderObject("UIGradient", {
+				Color = ColorSequence.new(Color3.fromRGB(255, 255, 255), Color3.fromRGB(220, 220, 220)),
+				Enabled = true,
+				Rotation = 270,
+				Parent = Holder_Outline_Frame
+			})
+			--
+			local Outline_Frame_Title = utility:RenderObject("TextLabel", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Holder_Outline_Frame,
+				Position = UDim2.new(0, 8, 0, 0),
+				Size = UDim2.new(1, 0, 1, 0),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text = "",
+				TextColor3 = Color3.fromRGB(155, 155, 155),
+				TextSize = 9,
+				TextStrokeTransparency = 1,
+				TextXAlignment = "Left"
+			})
+			--
+			local Outline_Frame_Title2 = utility:RenderObject("TextLabel", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Holder_Outline_Frame,
+				Position = UDim2.new(0, 8, 0, 0),
+				Size = UDim2.new(1, 0, 1, 0),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text = "",
+				TextColor3 = Color3.fromRGB(155, 155, 155),
+				TextSize = 9,
+				TextStrokeTransparency = 1,
+				TextTransparency = 0,
+				TextXAlignment = "Left"
+			})
+			--
+			local Outline_Frame_Arrow = utility:RenderObject("ImageLabel", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Holder_Outline_Frame,
+				Position = UDim2.new(1, -11, 0.5, -4),
+				Size = UDim2.new(0, 7, 0, 6),
+				Image = "rbxassetid://8532000591",
+				ImageColor3 = Color3.fromRGB(255, 255, 255),
+				ZIndex = 3
+			})
+			--
+			do -- // Functions
+				function Content:Set(state)
+					Content.State = state
 					--
-					function Content:Get()
-						return Content.State
-					end
+					Outline_Frame_Title.Text = Content.Options[Content:Get()]
+					Outline_Frame_Title2.Text = Content.Options[Content:Get()]
 					--
-					function Content:Open()
-						Content.Section:CloseContent()
-						--
-						local Open = {}
-						local Connections = {}
-						--
-						local InputCheck
-						--
-						local Content_Open_Holder = utility:RenderObject("Frame", {
-							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-							BackgroundTransparency = 1,
-							BorderColor3 = Color3.fromRGB(0, 0, 0),
-							BorderSizePixel = 0,
-							Parent = Content.Section.Extra,
-							Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
-							Size = UDim2.new(1, -98, 0, (18 * #Content.Options) + 2),
-							ZIndex = 6
-						})
-						-- //
-						local Open_Holder_Outline = utility:RenderObject("Frame", {
-							BackgroundColor3 = Color3.fromRGB(12, 12, 12),
-							BackgroundTransparency = 0,
-							BorderColor3 = Color3.fromRGB(0, 0, 0),
-							BorderSizePixel = 0,
-							Parent = Content_Open_Holder,
-							Position = UDim2.new(0, 0, 0, 0),
-							Size = UDim2.new(1, 0, 1, 0),
-							ZIndex = 6
-						})
-						-- //
-						local Open_Holder_Outline_Frame = utility:RenderObject("Frame", {
+					Content.Callback(Content.Options[Content:Get()])
+					--
+					if Content.Content.Open then
+						Content.Content:Refresh(Content:Get())
+					end
+				end
+				--
+				function Content:Get()
+					return Content.State
+				end
+				--
+				function Content:Open()
+					Content.Section:CloseContent()
+					--
+					local Open = {}
+					local Connections = {}
+					--
+					local InputCheck
+					--
+					-- ВЫЧИСЛЯЕМ ВЫСОТУ С ОГРАНИЧЕНИЕМ
+					local OptionHeight = 18
+					local MaxVisible = 6
+					local TotalHeight = (#Content.Options * OptionHeight) + 2
+					local MaxHeight = math.min(TotalHeight, MaxVisible * OptionHeight + 2)
+					local IsScrollable = TotalHeight > MaxHeight
+
+					local Content_Open_Holder = utility:RenderObject(IsScrollable and "ScrollingFrame" or "Frame", {
+						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+						BackgroundTransparency = 1,
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Parent = Content.Section.Extra,
+						Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
+						Size = UDim2.new(1, -98, 0, MaxHeight),
+						ZIndex = 6,
+						ScrollBarThickness = IsScrollable and 4 or 0,
+						ScrollingDirection = IsScrollable and "Y" or "None",
+						CanvasSize = IsScrollable and UDim2.new(0, 0, TotalHeight, 0) or UDim2.new(0, 0, 0, 0),
+						ClipsDescendants = true
+					})
+					-- //
+					local Open_Holder_Outline = utility:RenderObject("Frame", {
+						BackgroundColor3 = Color3.fromRGB(12, 12, 12),
+						BackgroundTransparency = 0,
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Parent = Content_Open_Holder,
+						Position = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						ZIndex = 6
+					})
+					-- //
+					local Open_Holder_Outline_Frame = utility:RenderObject("Frame", {
+						BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+						BackgroundTransparency = 0,
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Parent = Open_Holder_Outline,
+						Position = UDim2.new(0, 1, 0, 1),
+						Size = UDim2.new(1, -2, 1, -2),
+						ZIndex = 6
+					})
+					-- //
+					for Index, Option in pairs(Content.Options) do
+						local Outline_Frame_Option = utility:RenderObject("Frame", {
 							BackgroundColor3 = Color3.fromRGB(35, 35, 35),
 							BackgroundTransparency = 0,
 							BorderColor3 = Color3.fromRGB(0, 0, 0),
 							BorderSizePixel = 0,
-							Parent = Open_Holder_Outline,
-							Position = UDim2.new(0, 1, 0, 1),
-							Size = UDim2.new(1, -2, 1, -2),
+							Parent = Open_Holder_Outline_Frame,
+							Position = UDim2.new(0, 0, 0, OptionHeight * (Index - 1)),
+							Size = UDim2.new(1, 0, 0, OptionHeight),
 							ZIndex = 6
 						})
 						-- //
-						for Index, Option in pairs(Content.Options) do
-							local Outline_Frame_Option = utility:RenderObject("Frame", {
-								BackgroundColor3 = Color3.fromRGB(35, 35, 35),
-								BackgroundTransparency = 0,
-								BorderColor3 = Color3.fromRGB(0, 0, 0),
-								BorderSizePixel = 0,
-								Parent = Open_Holder_Outline_Frame,
-								Position = UDim2.new(0, 0, 0, 18 * (Index - 1)),
-								Size = UDim2.new(1, 0, 1 / #Content.Options, 0),
-								ZIndex = 6
-							})
-							-- //
-							local Frame_Option_Title = utility:RenderObject("TextLabel", {
-								BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-								BackgroundTransparency = 1,
-								BorderColor3 = Color3.fromRGB(0, 0, 0),
-								BorderSizePixel = 0,
-								Parent = Outline_Frame_Option,
-								Position = UDim2.new(0, 8, 0, 0),
-								Size = UDim2.new(1, 0, 1, 0),
-								ZIndex = 6,
-								Font = "Code",
-								RichText = true,
-								Text = tostring(Option),
-								TextColor3 = Index == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205),
-								TextSize = 9,
-								TextStrokeTransparency = 1,
-								TextXAlignment = "Left"
-							})
-							--
-							local Frame_Option_Title2 = utility:RenderObject("TextLabel", {
-								BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-								BackgroundTransparency = 1,
-								BorderColor3 = Color3.fromRGB(0, 0, 0),
-								BorderSizePixel = 0,
-								Parent = Outline_Frame_Option,
-								Position = UDim2.new(0, 8, 0, 0),
-								Size = UDim2.new(1, 0, 1, 0),
-								ZIndex = 6,
-								Font = "Code",
-								RichText = true,
-								Text = tostring(Option),
-								TextColor3 = Index == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205),
-								TextSize = 9,
-								TextStrokeTransparency = 1,
-								TextTransparency = 0.5,
-								TextXAlignment = "Left"
-							})
-							--
-							local Frame_Option_Button = utility:RenderObject("TextButton", {
-								BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-								BackgroundTransparency = 1,
-								BorderColor3 = Color3.fromRGB(0, 0, 0),
-								BorderSizePixel = 0,
-								Parent = Outline_Frame_Option,
-								Size = UDim2.new(1, 0, 1, 0),
-								Text = "",
-								ZIndex = 6
-							})
-							--
-							do -- // Connections
-								local Clicked = utility:CreateConnection(Frame_Option_Button.MouseButton1Click, function(Input)
-									Content:Set(Index)
-								end)
-								--
-								local Entered = utility:CreateConnection(Frame_Option_Button.MouseEnter, function(Input)
-									Outline_Frame_Option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-								end)
-								--
-								local Left = utility:CreateConnection(Frame_Option_Button.MouseLeave, function(Input)
-									Outline_Frame_Option.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-								end)
-								--
-								Connections[#Connections + 1] = Clicked
-								Connections[#Connections + 1] = Entered
-								Connections[#Connections + 1] = Left
-							end
-							--
-							Open[#Open + 1] = {Index, Frame_Option_Title, Frame_Option_Title2, Outline_Frame_Option, Frame_Option_Button}
-						end
+						local Frame_Option_Title = utility:RenderObject("TextLabel", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Outline_Frame_Option,
+							Position = UDim2.new(0, 8, 0, 0),
+							Size = UDim2.new(1, 0, 1, 0),
+							ZIndex = 6,
+							Font = "Code",
+							RichText = true,
+							Text = tostring(Option),
+							TextColor3 = Index == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205),
+							TextSize = 9,
+							TextStrokeTransparency = 1,
+							TextXAlignment = "Left"
+						})
 						--
-						do -- // Functions
-							function Content.Content:Close()
-								Content.Content.Open = false
-								--
-								Holder_Outline_Frame.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
-								--
-								for Index, Value in pairs(Connections) do
-									Value:Disconnect()
-								end
-								--
-								InputCheck:Disconnect()
-								--
-								for Index, Value in pairs(Open) do
-									Value[2]:Remove()
-									Value[3]:Remove()
-									Value[4]:Remove()
-									Value[5]:Remove()
-								end
-								--
-								Content_Open_Holder:Remove()
-								Open_Holder_Outline:Remove()
-								Open_Holder_Outline_Frame:Remove()
-								--
-								function Content.Content:Refresh() end
-								--
-								InputCheck = nil
-								Connections = nil
-								Open = nil
-							end
-							--
-							function Content.Content:Refresh(state)
-								for Index, Value in pairs(Open) do
-									Value[2].TextColor3 = Value[1] == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205)
-									Value[3].TextColor3 = Value[1] == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205)
-								end
-							end
-						end
+						local Frame_Option_Title2 = utility:RenderObject("TextLabel", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Outline_Frame_Option,
+							Position = UDim2.new(0, 8, 0, 0),
+							Size = UDim2.new(1, 0, 1, 0),
+							ZIndex = 6,
+							Font = "Code",
+							RichText = true,
+							Text = tostring(Option),
+							TextColor3 = Index == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205),
+							TextSize = 9,
+							TextStrokeTransparency = 1,
+							TextTransparency = 0.5,
+							TextXAlignment = "Left"
+						})
 						--
-						Content.Content.Open = true
-						Content.Section.Content = Content.Content
-						--
-						Holder_Outline_Frame.BackgroundColor3 = Color3.fromRGB(46, 46, 46)
+						local Frame_Option_Button = utility:RenderObject("TextButton", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Outline_Frame_Option,
+							Size = UDim2.new(1, 0, 1, 0),
+							Text = "",
+							ZIndex = 6
+						})
 						--
 						do -- // Connections
-							task.wait()
-							--
-							InputCheck = utility:CreateConnection(uis.InputBegan, function(Input)
-								if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-									local Mouse = utility:MouseLocation()
-									--
-									if not (Mouse.X > Content_Open_Holder.AbsolutePosition.X  and Mouse.Y > (Content_Open_Holder.AbsolutePosition.Y + 36) and Mouse.X < (Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X) and Mouse.Y < (Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 36)) then
-										Content.Section:CloseContent()
-									end
-								end
+							local Clicked = utility:CreateConnection(Frame_Option_Button.MouseButton1Click, function(Input)
+								Content:Set(Index)
 							end)
+							--
+							local Entered = utility:CreateConnection(Frame_Option_Button.MouseEnter, function(Input)
+								Outline_Frame_Option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+							end)
+							--
+							local Left = utility:CreateConnection(Frame_Option_Button.MouseLeave, function(Input)
+								Outline_Frame_Option.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+							end)
+							--
+							Connections[#Connections + 1] = Clicked
+							Connections[#Connections + 1] = Entered
+							Connections[#Connections + 1] = Left
+						end
+						--
+						Open[#Open + 1] = {Index, Frame_Option_Title, Frame_Option_Title2, Outline_Frame_Option, Frame_Option_Button}
+					end
+					--
+					do -- // Functions
+						function Content.Content:Close()
+							Content.Content.Open = false
+							--
+							Holder_Outline_Frame.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+							--
+							for Index, Value in pairs(Connections) do
+								Value:Disconnect()
+							end
+							--
+							InputCheck:Disconnect()
+							--
+							for Index, Value in pairs(Open) do
+								Value[2]:Remove()
+								Value[3]:Remove()
+								Value[4]:Remove()
+								Value[5]:Remove()
+							end
+							--
+							Content_Open_Holder:Remove()
+							Open_Holder_Outline:Remove()
+							Open_Holder_Outline_Frame:Remove()
+							--
+							function Content.Content:Refresh() end
+							--
+							InputCheck = nil
+							Connections = nil
+							Open = nil
+						end
+						--
+						function Content.Content:Refresh(state)
+							for Index, Value in pairs(Open) do
+								Value[2].TextColor3 = Value[1] == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205)
+								Value[3].TextColor3 = Value[1] == Content.State and Content.Window.Accent or Color3.fromRGB(205, 205, 205)
+							end
 						end
 					end
-				end
-				--
-				do -- // Connections
-					utility:CreateConnection(Content_Holder_Button.MouseButton1Down, function(Input)
-						if Content.Content.Open then
-							Content.Section:CloseContent()
-						else
-							Content:Open()
-						end
-					end)
 					--
-					utility:CreateConnection(Content_Holder_Button.MouseEnter, function(Input)
-						Holder_Outline_Frame.BackgroundColor3 = Color3.fromRGB(46, 46, 46)
-					end)
+					Content.Content.Open = true
+					Content.Section.Content = Content.Content
 					--
-					utility:CreateConnection(Content_Holder_Button.MouseLeave, function(Input)
-						Holder_Outline_Frame.BackgroundColor3 = Content.Content.Open and Color3.fromRGB(46, 46, 46) or Color3.fromRGB(36, 36, 36)
-					end)
+					Holder_Outline_Frame.BackgroundColor3 = Color3.fromRGB(46, 46, 46)
+					--
+					do -- // Connections
+						task.wait()
+						--
+						InputCheck = utility:CreateConnection(uis.InputBegan, function(Input)
+							if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
+								local Mouse = utility:MouseLocation()
+								--
+								local AbsX = Content_Open_Holder.AbsolutePosition.X
+								local AbsY = Content_Open_Holder.AbsolutePosition.Y
+								local AbsSizeX = Content_Open_Holder.AbsoluteSize.X
+								local AbsSizeY = Content_Open_Holder.AbsoluteSize.Y
+								--
+								-- Добавляем проверку клика по опциям
+								local clickedOption = false
+								for _, option in pairs(Open) do
+									local btn = option[5]
+									if btn and btn.AbsolutePosition then
+										local bAbsX = btn.AbsolutePosition.X
+										local bAbsY = btn.AbsolutePosition.Y
+										if Mouse.X >= bAbsX and Mouse.X <= bAbsX + btn.AbsoluteSize.X and
+											Mouse.Y >= bAbsY and Mouse.Y <= bAbsY + btn.AbsoluteSize.Y then
+											clickedOption = true
+											break
+										end
+									end
+								end
+								--
+								if not clickedOption and not (Mouse.X >= AbsX and Mouse.Y >= (AbsY + 36 + (36/2)) and Mouse.X <= (AbsX + AbsSizeX) and Mouse.Y <= (AbsY + AbsSizeY + 36 + (36/2))) then
+									Content.Section:CloseContent()
+								end
+							end
+						end)
+					end
 				end
-				--
-				Content:Set(Content.State)
 			end
 			--
-			return Content
+			do -- // Connections
+				utility:CreateConnection(Content_Holder_Button.MouseButton1Down, function(Input)
+					if Content.Content.Open then
+						Content.Section:CloseContent()
+					else
+						Content:Open()
+					end
+				end)
+				--
+				utility:CreateConnection(Content_Holder_Button.MouseEnter, function(Input)
+					Holder_Outline_Frame.BackgroundColor3 = Color3.fromRGB(46, 46, 46)
+				end)
+				--
+				utility:CreateConnection(Content_Holder_Button.MouseLeave, function(Input)
+					Holder_Outline_Frame.BackgroundColor3 = Content.Content.Open and Color3.fromRGB(46, 46, 46) or Color3.fromRGB(36, 36, 36)
+				end)
+			end
+			--
+			Content:Set(Content.State)
 		end
+		--
+		return Content
+	end
 		--
 		function sections:CreateMultibox(Properties)
 			Properties = Properties or {}
