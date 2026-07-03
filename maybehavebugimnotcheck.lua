@@ -1,6 +1,5 @@
 -- [[ // Error Handling // ]]
-local Passed, Statement = pcall(function()
-	-- [[ // Libraries // ]]
+-- [[ // Libraries // ]]
 	local library = {
 		Renders = {},
 		Connections = {},
@@ -2367,5 +2366,5 @@ local Passed, Statement = pcall(function()
 			return Content
 		end
 	end
-end)
---
+
+return library
