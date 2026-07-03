@@ -1985,198 +1985,422 @@ end
 			return Content
 		end
 		--
-		function sections:CreateKeybind(Properties)
-			Properties = Properties or {}
+	lua
+	function sections:CreateKeybind(Properties)
+		Properties = Properties or {}
+		--
+		local Content = {
+			Name = (Properties.name or Properties.Name or Properties.title or Properties.Title or "New Keybind"),
+			State = (Properties.state or Properties.State or Properties.def or Properties.Def or Properties.default or Properties.Default or nil),
+			Mode = (Properties.mode or Properties.Mode or "Toggle"),
+			Callback = (Properties.callback or Properties.Callback or Properties.callBack or Properties.CallBack or function() end),
+			HeldCallback = (Properties.HeldCallback or function() end),
+			KeyChangeCallback = (Properties.KeyChangeCallback or function() end),
+			Active = false,
+			Holding = false,
+			Content = {
+				Open = false
+			},
+			Window = self.Window,
+			Page = self.Page,
+			Section = self
+		}
+		--
+		local Keys = {
+			KeyCodes = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "0", "Insert", "Tab", "Home", "End", "LeftAlt", "LeftControl", "LeftShift", "RightAlt", "RightControl", "RightShift", "CapsLock"},
+			Inputs = {"MouseButton1", "MouseButton2", "MouseButton3"},
+			Shortened = {["MouseButton1"] = "M1", ["MouseButton2"] = "M2", ["MouseButton3"] = "M3", ["Insert"] = "INS", ["LeftAlt"] = "LA", ["LeftControl"] = "LC", ["LeftShift"] = "LS", ["RightAlt"] = "RA", ["RightControl"] = "RC", ["RightShift"] = "RS", ["CapsLock"] = "CL"}
+		}
+		--
+		do
+			local Content_Holder = utility:RenderObject("Frame", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content.Section.Holder,
+				Size = UDim2.new(1, 0, 0, 18),
+				ZIndex = 3
+			})
 			--
-			local Content = {
-				Name = (Properties.name or Properties.Name or Properties.title or Properties.Title or "New Toggle"),
-				State = (Properties.state or Properties.State or Properties.def or Properties.Def or Properties.default or Properties.Default or nil),
-				Mode = (Properties.mode or Properties.Mode or "Hold"),
-				Callback = (Properties.callback or Properties.Callback or Properties.callBack or Properties.CallBack or function() end),
-				Active = false,
-				Holding = false,
-				Window = self.Window,
-				Page = self.Page,
-				Section = self
-			}
+			local Content_Holder_Title = utility:RenderObject("TextLabel", {
+				AnchorPoint = Vector2.new(0, 0),
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Position = UDim2.new(0, 41, 0, 0),
+				Size = UDim2.new(1, -41, 1, 0),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text = Content.Name,
+				TextColor3 = Color3.fromRGB(205, 205, 205),
+				TextSize = 9,
+				TextStrokeTransparency = 1,
+				TextXAlignment = "Left"
+			})
 			--
-			local Keys = {
-				KeyCodes = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M", "One", "Two", "Three", "Four", "Five", "Six", "Seveen", "Eight", "Nine", "0", "Insert", "Tab", "Home", "End", "LeftAlt", "LeftControl", "LeftShift", "RightAlt", "RightControl", "RightShift", "CapsLock"},
-				Inputs = {"MouseButton1", "MouseButton2", "MouseButton3"},
-				Shortened = {["MouseButton1"] = "M1", ["MouseButton2"] = "M2", ["MouseButton3"] = "M3", ["Insert"] = "INS", ["LeftAlt"] = "LA", ["LeftControl"] = "LC", ["LeftShift"] = "LS", ["RightAlt"] = "RA", ["RightControl"] = "RC", ["RightShift"] = "RS", ["CapsLock"] = "CL"}
-			}
+			local Content_Holder_Title2 = utility:RenderObject("TextLabel", {
+				AnchorPoint = Vector2.new(0, 0),
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Position = UDim2.new(0, 41, 0, 0),
+				Size = UDim2.new(1, -41, 1, 0),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text = Content.Name,
+				TextColor3 = Color3.fromRGB(205, 205, 205),
+				TextSize = 9,
+				TextStrokeTransparency = 1,
+				TextTransparency = 0.5,
+				TextXAlignment = "Left"
+			})
 			--
-			do
-				local Content_Holder = utility:RenderObject("Frame", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content.Section.Holder,
-					Size = UDim2.new(1, 0, 0, 8 + 10),
-					ZIndex = 3
-				})
-				-- //
-				local Content_Holder_Title = utility:RenderObject("TextLabel", {
-					AnchorPoint = Vector2.new(0, 0),
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Position = UDim2.new(0, 41, 0, 0),
-					Size = UDim2.new(1, -41, 1, 0),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text = Content.Name,
-					TextColor3 = Color3.fromRGB(205, 205, 205),
-					TextSize = 9,
-					TextStrokeTransparency = 1,
-					TextXAlignment = "Left"
-				})
-				--
-				local Content_Holder_Title2 = utility:RenderObject("TextLabel", {
-					AnchorPoint = Vector2.new(0, 0),
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Position = UDim2.new(0, 41, 0, 0),
-					Size = UDim2.new(1, -41, 1, 0),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text = Content.Name,
-					TextColor3 = Color3.fromRGB(205, 205, 205),
-					TextSize = 9,
-					TextStrokeTransparency = 1,
-					TextTransparency = 0.5,
-					TextXAlignment = "Left"
-				})
-				--
-				local Content_Holder_Button = utility:RenderObject("TextButton", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Size = UDim2.new(1, 0, 1, 0),
-					Text = ""
-				})
-				-- //
-				local Content_Holder_Value = utility:RenderObject("TextLabel", {
-					AnchorPoint = Vector2.new(0, 0),
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(0, 0, 0),
-					BorderSizePixel = 0,
-					Parent = Content_Holder,
-					Position = UDim2.new(0, 41, 0, 0),
-					Size = UDim2.new(1, -61, 1, 0),
-					ZIndex = 3,
-					Font = "Code",
-					RichText = true,
-					Text =  "",
-					TextColor3 = Color3.fromRGB(114, 114, 114),
-					TextStrokeColor3 = Color3.fromRGB(15, 15, 15),
-					TextSize = 9,
-					TextStrokeTransparency = 0,
-					TextXAlignment = "Right"
-				})
-				--
-				do -- // Functions
-					function Content:Set(state)
-						Content.State = state or {}
-						Content.Active = false
-						--
-						Content_Holder_Value.Text = "[" .. (#Content:Get() > 0 and Content:Shorten(Content:Get()[2]) or "-") .. "]"
-						--
-						Content.Callback(Content:Get())
-					end
+			local Content_Holder_Button = utility:RenderObject("TextButton", {
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Size = UDim2.new(1, 0, 1, 0),
+				Text = ""
+			})
+			--
+			local Content_Holder_Value = utility:RenderObject("TextLabel", {
+				AnchorPoint = Vector2.new(0, 0),
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(0, 0, 0),
+				BorderSizePixel = 0,
+				Parent = Content_Holder,
+				Position = UDim2.new(0, 41, 0, 0),
+				Size = UDim2.new(1, -61, 1, 0),
+				ZIndex = 3,
+				Font = "Code",
+				RichText = true,
+				Text =  "",
+				TextColor3 = Color3.fromRGB(114, 114, 114),
+				TextStrokeColor3 = Color3.fromRGB(15, 15, 15),
+				TextSize = 9,
+				TextStrokeTransparency = 0,
+				TextXAlignment = "Right"
+			})
+			--
+			do -- // Functions
+				function Content:Set(state)
+					Content.State = state or {}
+					Content.Active = false
 					--
-					function Content:Get()
-						return Content.State
-					end
+					local KeyName = (#Content:Get() > 0 and Content:Shorten(Content:Get()[2]) or "-")
+					Content_Holder_Value.Text = "[" .. KeyName .. "]"
 					--
-					function Content:Shorten(Str)
-						for Index, Value in pairs(Keys.Shortened) do
-							Str = string.gsub(Str, Index, Value)
-						end
-						--
-						return Str
+					Content.KeyChangeCallback(Content:Get())
+				end
+				--
+				function Content:Get()
+					return Content.State
+				end
+				--
+				function Content:IsHeld()
+					return Content.Active
+				end
+				--
+				function Content:GetMode()
+					return Content.Mode
+				end
+				--
+				function Content:GetKey()
+					return Content:Get()[2]
+				end
+				--
+				function Content:Shorten(Str)
+					if not Str then return "None" end
+					for Index, Value in pairs(Keys.Shortened) do
+						Str = string.gsub(Str, Index, Value)
 					end
-					--
-					function Content:Change(Key)
-						if Key.EnumType then
-							if Key.EnumType == Enum.KeyCode or Key.EnumType == Enum.UserInputType then
-								if table.find(Keys.KeyCodes, Key.Name) or table.find(Keys.Inputs, Key.Name) then
-									Content:Set({Key.EnumType == Enum.KeyCode and "KeyCode" or "UserInputType", Key.Name})
-									return true
+					return Str
+				end
+				--
+				function Content:Change(Key)
+					if Key.EnumType then
+						if Key.EnumType == Enum.KeyCode or Key.EnumType == Enum.UserInputType then
+							if table.find(Keys.KeyCodes, Key.Name) or table.find(Keys.Inputs, Key.Name) then
+								local KeyType = Key.EnumType == Enum.KeyCode and "KeyCode" or "UserInputType"
+								if Content:Get()[1] == KeyType and Content:Get()[2] == Key.Name then
+									Content:Set({})
+								else
+									Content:Set({KeyType, Key.Name})
 								end
+								return true
 							end
 						end
 					end
 				end
 				--
-				do -- // Connections
-					utility:CreateConnection(Content_Holder_Button.MouseButton1Click, function(Input)
-						Content.Holding = true
+				function Content:OpenModeMenu()
+					Content.Section:CloseContent()
+					--
+					local Open = {}
+					local Connections = {}
+					local InputCheck
+					--
+					local Modes = {"Toggle", "Hold"}
+					--
+					local Content_Open_Holder = utility:RenderObject("Frame", {
+						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+						BackgroundTransparency = 1,
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Parent = Content.Section.Extra,
+						Position = UDim2.new(0, Content_Holder_Value.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X + Content_Holder_Value.AbsoluteSize.X + 5, 0, Content_Holder.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y),
+						Size = UDim2.new(0, 50, 0, (14 * #Modes) + 2),
+						ZIndex = 6
+					})
+					--
+					local Open_Holder_Outline = utility:RenderObject("Frame", {
+						BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+						BackgroundTransparency = 0,
+						BorderColor3 = Color3.fromRGB(12, 12, 12),
+						BorderMode = "Inset",
+						BorderSizePixel = 1,
+						Parent = Content_Open_Holder,
+						Position = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						ZIndex = 6
+					})
+					--
+					local Open_Holder_Outline_Frame = utility:RenderObject("Frame", {
+						BackgroundColor3 = Color3.fromRGB(23, 23, 23),
+						BackgroundTransparency = 0,
+						BorderColor3 = Color3.fromRGB(0, 0, 0),
+						BorderSizePixel = 0,
+						Parent = Open_Holder_Outline,
+						Position = UDim2.new(0, 1, 0, 1),
+						Size = UDim2.new(1, -2, 1, -2),
+						ZIndex = 6
+					})
+					--
+					for Index, Mode in pairs(Modes) do
+						local Outline_Frame_Option = utility:RenderObject("Frame", {
+							BackgroundColor3 = Color3.fromRGB(23, 23, 23),
+							BackgroundTransparency = 0,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Open_Holder_Outline_Frame,
+							Position = UDim2.new(0, 0, 0, 14 * (Index - 1)),
+							Size = UDim2.new(1, 0, 1 / #Modes, 0),
+							ZIndex = 6
+						})
 						--
-						Content_Holder_Value.TextColor3 = Color3.fromRGB(255, 0, 0)
-					end)
-					--
-					utility:CreateConnection(Content_Holder_Button.MouseButton2Click, function(Input)
-						Content:Set()
-					end)
-					--
-					utility:CreateConnection(Content_Holder_Button.MouseEnter, function(Input)
-						Content_Holder_Value.TextColor3 = Color3.fromRGB(164, 164, 164)
-					end)
-					--
-					utility:CreateConnection(Content_Holder_Button.MouseLeave, function(Input)
-						Content_Holder_Value.TextColor3 = Content.Holding and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(114, 114, 114)
-					end)
-					--
-					utility:CreateConnection(uis.InputBegan, function(Input)
-						if Content.Holding then
-							local Success = Content:Change(Input.KeyCode.Name ~= "Unknown" and Input.KeyCode or Input.UserInputType)
+						local Frame_Option_Title = utility:RenderObject("TextLabel", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Outline_Frame_Option,
+							Position = UDim2.new(0, 8, 0, 0),
+							Size = UDim2.new(1, 0, 1, 0),
+							ZIndex = 6,
+							Font = "Code",
+							RichText = true,
+							Text = Mode,
+							TextColor3 = Mode == Content.Mode and Content.Window.Accent or Color3.fromRGB(205, 205, 205),
+							TextSize = 9,
+							TextStrokeTransparency = 1,
+							TextXAlignment = "Left"
+						})
+						--
+						local Frame_Option_Title2 = utility:RenderObject("TextLabel", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Outline_Frame_Option,
+							Position = UDim2.new(0, 8, 0, 0),
+							Size = UDim2.new(1, 0, 1, 0),
+							ZIndex = 6,
+							Font = "Code",
+							RichText = true,
+							Text = Mode,
+							TextColor3 = Mode == Content.Mode and Content.Window.Accent or Color3.fromRGB(205, 205, 205),
+							TextSize = 9,
+							TextStrokeTransparency = 1,
+							TextTransparency = 0.5,
+							TextXAlignment = "Left"
+						})
+						--
+						local Frame_Option_Button = utility:RenderObject("TextButton", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Outline_Frame_Option,
+							Size = UDim2.new(1, 0, 1, 0),
+							Text = "",
+							ZIndex = 6
+						})
+						--
+						do
+							local Clicked = utility:CreateConnection(Frame_Option_Button.MouseButton1Click, function(Input)
+								Content.Mode = Mode
+								Content.Active = false
+								Content.Content:Refresh()
+							end)
 							--
-							if Success then
-								Content.Holding = false
-								--
-								Content_Holder_Value.TextColor3 = Color3.fromRGB(114, 114, 114)
-							end
+							local Entered = utility:CreateConnection(Frame_Option_Button.MouseEnter, function(Input)
+								Outline_Frame_Option.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+							end)
+							--
+							local Left = utility:CreateConnection(Frame_Option_Button.MouseLeave, function(Input)
+								Outline_Frame_Option.BackgroundColor3 = Color3.fromRGB(23, 23, 23)
+							end)
+							--
+							Connections[#Connections + 1] = Clicked
+							Connections[#Connections + 1] = Entered
+							Connections[#Connections + 1] = Left
 						end
 						--
-						if Content:Get()[1] and Content:Get()[2] then
-							if Input.KeyCode == Enum[Content:Get()[1]][Content:Get()[2]] or Input.UserInputType == Enum[Content:Get()[1]][Content:Get()[2]] then
-								if Content.Mode == "Hold" then
-									Content.Active = true
-								elseif Content.Mode == "Toggle" then
-									Content.Active = not Content.Active
-								end
-							end
-						end
-					end)
+						Open[#Open + 1] = {Mode, Frame_Option_Title, Frame_Option_Title2, Outline_Frame_Option, Frame_Option_Button}
+					end
 					--
-					utility:CreateConnection(uis.InputEnded, function(Input)
-						if Content:Get()[1] and Content:Get()[2] then
-							if Input.KeyCode == Enum[Content:Get()[1]][Content:Get()[2]] or Input.UserInputType == Enum[Content:Get()[1]][Content:Get()[2]] then
-								if Content.Mode == "Hold" then
-									Content.Active = false
-								end
+					do
+						function Content.Content:Close()
+							Content.Content.Open = false
+							--
+							for Index, Value in pairs(Connections) do
+								Value:Disconnect()
+							end
+							--
+							if InputCheck then
+								InputCheck:Disconnect()
+							end
+							--
+							for Index, Value in pairs(Open) do
+								Value[2]:Remove()
+								Value[3]:Remove()
+								Value[4]:Remove()
+								Value[5]:Remove()
+							end
+							--
+							Content_Open_Holder:Remove()
+							Open_Holder_Outline:Remove()
+							Open_Holder_Outline_Frame:Remove()
+							--
+							function Content.Content:Refresh() end
+							--
+							InputCheck = nil
+							Connections = nil
+							Open = nil
+						end
+						--
+						function Content.Content:Refresh()
+							for Index, Value in pairs(Open) do
+								Value[2].TextColor3 = Value[1] == Content.Mode and Content.Window.Accent or Color3.fromRGB(205, 205, 205)
+								Value[3].TextColor3 = Value[1] == Content.Mode and Content.Window.Accent or Color3.fromRGB(205, 205, 205)
 							end
 						end
-					end)
+					end
+					--
+					Content.Content.Open = true
+					Content.Section.Content = Content.Content
+					--
+					do
+						task.wait()
+						--
+						InputCheck = utility:CreateConnection(uis.InputBegan, function(Input)
+							if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
+								local Mouse = utility:MouseLocation()
+								--
+								if not (Mouse.X >= Content_Open_Holder.AbsolutePosition.X and Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y + 36 + (36/2)) and Mouse.X <= (Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X) and Mouse.Y <= (Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 36 + (36/2))) then
+									Content.Section:CloseContent()
+								end
+							end
+						end)
+					end
 				end
-				--
-				Content:Set(Content.State)
 			end
 			--
-			return Content
+			do -- // Connections
+				utility:CreateConnection(Content_Holder_Button.MouseButton1Click, function(Input)
+					Content.Holding = true
+					Content_Holder_Value.TextColor3 = Color3.fromRGB(255, 0, 0)
+				end)
+				--
+				utility:CreateConnection(Content_Holder_Button.MouseButton2Click, function(Input)
+					if Content.Content.Open then
+						Content.Section:CloseContent()
+					else
+						Content:OpenModeMenu()
+					end
+				end)
+				--
+				utility:CreateConnection(Content_Holder_Button.MouseEnter, function(Input)
+					Content_Holder_Value.TextColor3 = Color3.fromRGB(164, 164, 164)
+				end)
+				--
+				utility:CreateConnection(Content_Holder_Button.MouseLeave, function(Input)
+					Content_Holder_Value.TextColor3 = Content.Holding and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(114, 114, 114)
+				end)
+				--
+				utility:CreateConnection(uis.InputBegan, function(Input)
+					-- Режим установки клавиши
+					if Content.Holding then
+						local Success = Content:Change(Input.KeyCode.Name ~= "Unknown" and Input.KeyCode or Input.UserInputType)
+						if Success then
+							Content.Holding = false
+							Content_Holder_Value.TextColor3 = Color3.fromRGB(114, 114, 114)
+						end
+					end
+					--
+					-- Режим работы клавиши
+					if Content:Get()[1] and Content:Get()[2] then
+						local keyPressed = false
+						if Input.KeyCode then
+							keyPressed = Input.KeyCode == Enum[Content:Get()[1]][Content:Get()[2]]
+						elseif Input.UserInputType then
+							keyPressed = Input.UserInputType == Enum[Content:Get()[1]][Content:Get()[2]]
+						end
+						--
+						if keyPressed then
+							if Content.Mode == "Hold" then
+								Content.Active = true
+								Content.HeldCallback(true)
+							elseif Content.Mode == "Toggle" then
+								Content.Active = not Content.Active
+								Content.Callback(Content.Active)
+							end
+						end
+					end
+				end)
+				--
+				utility:CreateConnection(uis.InputEnded, function(Input)
+					if Content:Get()[1] and Content:Get()[2] then
+						local keyReleased = false
+						if Input.KeyCode then
+							keyReleased = Input.KeyCode == Enum[Content:Get()[1]][Content:Get()[2]]
+						elseif Input.UserInputType then
+							keyReleased = Input.UserInputType == Enum[Content:Get()[1]][Content:Get()[2]]
+						end
+						--
+						if keyReleased and Content.Mode == "Hold" then
+							Content.Active = false
+							Content.HeldCallback(false)
+						end
+					end
+				end)
+			end
+			--
+			Content:Set(Content.State)
 		end
+		--
+		return Content
+	end
 		--
 		function sections:CreateColorpicker(Properties)
 			Properties = Properties or {}
