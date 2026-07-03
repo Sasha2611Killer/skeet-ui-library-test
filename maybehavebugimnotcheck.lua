@@ -50,6 +50,52 @@
 		return uis:GetMouseLocation()
 	end
 	--
+	
+function utility:MakeDraggable(UiObject)
+	local Dragging = false
+	local DragInput = nil
+	local DragStart = nil
+	local StartPos = nil
+
+	local function Update(Input)
+		if library.OnColorPicker then return end
+
+		local Delta = Input.Position - DragStart
+		local Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + Delta.X, StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y)
+		tws:Create(UiObject, TweenInfo.new(0.1), {Position = Position}):Play()
+	end
+
+	utility:CreateConnection(UiObject.InputBegan, function(Input)
+		local c
+		if Input.UserInputType == Enum.UserInputType.MouseButton1 and uis:GetFocusedTextBox() == nil then
+			Dragging = true
+			DragStart = Input.Position
+			StartPos = UiObject.Position
+
+			c = Input.Changed:Connect(function()
+				if Input.UserInputState == Enum.UserInputState.End then
+					Dragging = false
+					c:Disconnect()
+				end
+			end)
+		end
+	end)
+
+	utility:CreateConnection(UiObject.InputChanged, function(Input)
+		if Input.UserInputType == Enum.UserInputType.MouseMovement then
+			DragInput = Input
+		end
+	end)
+
+
+	utility:CreateConnection(uis.InputChanged, function(Input)
+		if Input == DragInput and Dragging then
+			Update(Input)
+		end
+	end)
+end
+	
+	--
 	function utility:Serialise(Table)
 		local Serialised = ""
 		--
@@ -103,6 +149,8 @@
 				Position = UDim2.new(0.5, 0, 0.5, 0),
 				Size = UDim2.new(0, 660, 0, 560)
 			})
+			
+		    utility:MakeDraggable(ScreenGui_MainFrame)
 			-- //
 			local ScreenGui_MainFrame_InnerBorder = utility:RenderObject("Frame", {
 				BackgroundColor3 = Color3.fromRGB(40, 40, 40),
