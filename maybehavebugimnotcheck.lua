@@ -2541,7 +2541,6 @@ end
 					Content.Section:CloseContent()
 					--
 					local Connections = {}
-					local InputCheck
 					local Dragging = {Sat = false, Hue = false, Alpha = false}
 					--
 					local Content_Open_Holder = utility:RenderObject("Frame", {
@@ -2598,7 +2597,7 @@ end
 					local ValSat_Picker_Dark = utility:RenderObject("ImageLabel", {
 						BackgroundTransparency = 1,
 						BorderSizePixel = 0,
-						Image = "rbxassetid://4155801252", -- или ваша текстура
+						Image = "rbxassetid://4155801252",
 						Parent = ValSat_Picker_Color,
 						Size = UDim2.new(1, 0, 1, 0),
 						ZIndex = 7
@@ -2661,7 +2660,7 @@ end
 					local Alpha_Picker_BG = utility:RenderObject("ImageLabel", {
 						BackgroundTransparency = 1,
 						BorderSizePixel = 0,
-						Image = "rbxassetid://8531997870", -- ваша текстура прозрачности
+						Image = "rbxassetid://8531997870",
 						Parent = Alpha_Picker_Outline,
 						Position = UDim2.new(0, 1, 0, 1),
 						Size = UDim2.new(1, -2, 1, -2),
@@ -2772,12 +2771,8 @@ end
 							for Index, Value in pairs(Connections) do
 								Value:Disconnect()
 							end
-							if InputCheck then
-								InputCheck:Disconnect()
-							end
 							Content_Open_Holder:Remove()
 							function Content.Content:Refresh() end
-							InputCheck = nil
 							Connections = nil
 						end
 						function Content.Content:Refresh() end
@@ -2787,35 +2782,6 @@ end
 					Content.Section.Content = Content.Content
 					UpdateDisplay()
 					--
-					task.wait()
-					InputCheck = utility:CreateConnection(uis.InputBegan, function(Input)
-						print("3. InputCheck сработал!")
-						if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-							local Mouse = utility:MouseLocation()
-							print("4. Палитра открыта, проверяем клик")
-
-							-- Проверяем клик по палитре
-							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
-								Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y + 29 + (29/2)) and 
-								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
-								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 29 + (29/2)
-
-							-- Проверяем клик по кнопке Colorpicker
-							local onButton = Mouse.X >= Content_Holder.AbsolutePosition.X and 
-								Mouse.Y >= Content_Holder.AbsolutePosition.Y and 
-								Mouse.X <= Content_Holder.AbsolutePosition.X + Content_Holder.AbsoluteSize.X and 
-								Mouse.Y <= Content_Holder.AbsolutePosition.Y + Content_Holder.AbsoluteSize.Y
-
-							print("5. onPalette =", onPalette, "onButton =", onButton)
-
-							if onButton then
-								print("6. Закрываем через InputCheck!")
-								Content.Section:CloseContent()
-							else
-								print("6. НЕ закрываем (клик по палитре или кнопке)")
-							end
-						end
-					end)
 				end
 			end
 			--
