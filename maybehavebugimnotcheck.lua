@@ -2800,9 +2800,9 @@ end
 
 							-- Проверяем, кликнули ли по палитре (с запасом 5 пикселей сверху и снизу)
 							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
-								Mouse.Y >= Content_Open_Holder.AbsolutePosition.Y - 25 and 
+								Mouse.Y >= Content_Open_Holder.AbsolutePosition.Y - 10 and 
 								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
-								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y - 25
+								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 10
 
 							-- Закрываем ТОЛЬКО если клик НЕ по кнопке И НЕ по палитре
 							if not onButton and not onPalette then
