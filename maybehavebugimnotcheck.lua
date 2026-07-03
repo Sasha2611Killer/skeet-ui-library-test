@@ -2801,10 +2801,10 @@ end
 								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 36 + (36/2)
 
 							-- Проверяем клик по кнопке Colorpicker
-							local onButton = Mouse.X >= Content_Holder_Button.AbsolutePosition.X and 
-								Mouse.Y >= Content_Holder_Button.AbsolutePosition.Y and 
-								Mouse.X <= Content_Holder_Button.AbsolutePosition.X + Content_Holder_Button.AbsoluteSize.X and 
-								Mouse.Y <= Content_Holder_Button.AbsolutePosition.Y + Content_Holder_Button.AbsoluteSize.Y
+							local onButton = Mouse.X >= Content_Holder.AbsolutePosition.X and 
+								Mouse.Y >= Content_Holder.AbsolutePosition.Y and 
+								Mouse.X <= Content_Holder.AbsolutePosition.X + Content_Holder.AbsoluteSize.X and 
+								Mouse.Y <= Content_Holder.AbsolutePosition.Y + Content_Holder.AbsoluteSize.Y
 
 							print("5. onPalette =", onPalette, "onButton =", onButton)
 
