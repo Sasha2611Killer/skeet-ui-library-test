@@ -2804,7 +2804,9 @@ end
 			do -- // Connections
 				utility:CreateConnection(Content_Holder_Button.MouseButton1Click, function(Input)
 					if Content.Content.Open then
-						Content.Section:CloseContent()
+						-- Если палитра открыта, НЕ закрываем её здесь
+						-- Закрытие происходит через InputCheck при клике вне палитры
+						return
 					else
 						Content:Open()
 					end
