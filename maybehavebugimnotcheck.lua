@@ -2808,7 +2808,7 @@ end
 
 							print("5. onPalette =", onPalette, "onButton =", onButton)
 
-							if not onPalette and not onButton then
+							if onButton then
 								print("6. Закрываем через InputCheck!")
 								Content.Section:CloseContent()
 							else
