@@ -2719,9 +2719,9 @@ end
 							end
 						end)
 
-						local InsetY = gse:GetGuiInset().Y
+						local InsetY = gse:GetGuiInset().Y  -- <-- Исправлено!
 
-						local RenderStep = rus.RenderStepped:Connect(function()
+						local RenderStep = rus.RenderStepped:Connect(function()  -- <-- Исправлено!
 							if not (Dragging.Sat or Dragging.Hue or Dragging.Alpha) then return end
 							local Mouse = utility:MouseLocation()
 
