@@ -2789,24 +2789,12 @@ end
 					--
 					task.wait()
 					InputCheck = utility:CreateConnection(uis.InputBegan, function(Input)
-						if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
+						if  Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
 							local Mouse = utility:MouseLocation()
-
-							-- Проверяем, кликнули ли по кнопке Colorpicker
-							local onButton = Mouse.X >= Content_Holder.AbsolutePosition.X and 
-								Mouse.Y >= Content_Holder.AbsolutePosition.Y and 
-								Mouse.X <= Content_Holder.AbsolutePosition.X + Content_Holder.AbsoluteSize.X and 
-								Mouse.Y <= Content_Holder.AbsolutePosition.Y + Content_Holder.AbsoluteSize.Y
-
-							-- Проверяем, кликнули ли по палитре (с запасом 5 пикселей сверху и снизу)
-							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
-								Mouse.Y >= Content_Open_Holder.AbsolutePosition.Y and 
-								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
-								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y - 10
-
-							-- Закрываем ТОЛЬКО если клик НЕ по кнопке И НЕ по палитре
-							if not onButton and not onPalette then
-								Content.Section:CloseContent()
+							if not (Mouse.X >= Content_Open_Holder.AbsolutePosition.X and Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y + 36 + (36/2)) and Mouse.X <= (Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X) and Mouse.Y <= (Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 36 + (36/2))) then
+								if not (Mouse.X >= Content_Holder.AbsolutePosition.X and Mouse.Y >= Content_Holder.AbsolutePosition.Y and Mouse.X <= (Content_Holder.AbsolutePosition.X + Content_Holder.AbsoluteSize.X) and Mouse.Y <= (Content_Holder.AbsolutePosition.Y + Content_Holder.AbsoluteSize.Y)) then
+									Content.Section:CloseContent()
+								end
 							end
 						end
 					end)
