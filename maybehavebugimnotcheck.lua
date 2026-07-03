@@ -1354,34 +1354,32 @@ end
 					local MaxHeight = math.min(TotalHeight, MaxVisible * OptionHeight + 2)
 					local IsScrollable = TotalHeight > MaxHeight
 
-					-- СОЗДАЕМ ПРАВИЛЬНЫЙ КОНТЕЙНЕР
+					-- СОЗДАЕМ КОНТЕЙНЕР ЧЕРЕЗ Instance.new() напрямую, чтобы избежать ошибок RenderObject
 					local Content_Open_Holder
 					if IsScrollable then
-						Content_Open_Holder = utility:RenderObject("ScrollingFrame", {
-							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-							BackgroundTransparency = 1,
-							BorderColor3 = Color3.fromRGB(0, 0, 0),
-							BorderSizePixel = 0,
-							Parent = Content.Section.Extra,
-							Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
-							Size = UDim2.new(1, -98, 0, MaxHeight),
-							ZIndex = 6,
-							ScrollBarThickness = 4,
-							ScrollingDirection = "Y",
-							CanvasSize = UDim2.new(0, 0, TotalHeight, 0),
-							ClipsDescendants = true
-						})
+						Content_Open_Holder = Instance.new("ScrollingFrame")
+						Content_Open_Holder.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+						Content_Open_Holder.BackgroundTransparency = 1
+						Content_Open_Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+						Content_Open_Holder.BorderSizePixel = 0
+						Content_Open_Holder.Parent = Content.Section.Extra
+						Content_Open_Holder.Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21)
+						Content_Open_Holder.Size = UDim2.new(1, -98, 0, MaxHeight)
+						Content_Open_Holder.ZIndex = 6
+						Content_Open_Holder.ScrollBarThickness = 4
+						Content_Open_Holder.ScrollingDirection = "Y"
+						Content_Open_Holder.CanvasSize = UDim2.new(0, 0, TotalHeight, 0)
+						Content_Open_Holder.ClipsDescendants = true
 					else
-						Content_Open_Holder = utility:RenderObject("Frame", {
-							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-							BackgroundTransparency = 1,
-							BorderColor3 = Color3.fromRGB(0, 0, 0),
-							BorderSizePixel = 0,
-							Parent = Content.Section.Extra,
-							Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
-							Size = UDim2.new(1, -98, 0, MaxHeight),
-							ZIndex = 6
-						})
+						Content_Open_Holder = Instance.new("Frame")
+						Content_Open_Holder.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+						Content_Open_Holder.BackgroundTransparency = 1
+						Content_Open_Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+						Content_Open_Holder.BorderSizePixel = 0
+						Content_Open_Holder.Parent = Content.Section.Extra
+						Content_Open_Holder.Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21)
+						Content_Open_Holder.Size = UDim2.new(1, -98, 0, MaxHeight)
+						Content_Open_Holder.ZIndex = 6
 					end
 					-- //
 					local Open_Holder_Outline = utility:RenderObject("Frame", {
