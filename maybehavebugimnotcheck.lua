@@ -2796,9 +2796,9 @@ end
 
 							-- Проверяем клик по палитре
 							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
-								Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y + 31 + (31/2)) and 
+								Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y + 32 + (32/2)) and 
 								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
-								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 31 + (31/2)
+								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 32 + (32/2)
 
 							-- Проверяем клик по кнопке Colorpicker
 							local onButton = Mouse.X >= Content_Holder.AbsolutePosition.X and 
