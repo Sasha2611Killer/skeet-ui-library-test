@@ -1354,20 +1354,35 @@ end
 					local MaxHeight = math.min(TotalHeight, MaxVisible * OptionHeight + 2)
 					local IsScrollable = TotalHeight > MaxHeight
 
-					local Content_Open_Holder = utility:RenderObject(IsScrollable and "ScrollingFrame" or "Frame", {
-						BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-						BackgroundTransparency = 1,
-						BorderColor3 = Color3.fromRGB(0, 0, 0),
-						BorderSizePixel = 0,
-						Parent = Content.Section.Extra,
-						Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
-						Size = UDim2.new(1, -98, 0, MaxHeight),
-						ZIndex = 6,
-						ScrollBarThickness = IsScrollable and 4 or 0,
-						ScrollingDirection = IsScrollable and "Y" or "None",
-						CanvasSize = IsScrollable and UDim2.new(0, 0, TotalHeight, 0) or UDim2.new(0, 0, 0, 0),
-						ClipsDescendants = true
-					})
+					-- СОЗДАЕМ ПРАВИЛЬНЫЙ КОНТЕЙНЕР
+					local Content_Open_Holder
+					if IsScrollable then
+						Content_Open_Holder = utility:RenderObject("ScrollingFrame", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Content.Section.Extra,
+							Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
+							Size = UDim2.new(1, -98, 0, MaxHeight),
+							ZIndex = 6,
+							ScrollBarThickness = 4,
+							ScrollingDirection = "Y",
+							CanvasSize = UDim2.new(0, 0, TotalHeight, 0),
+							ClipsDescendants = true
+						})
+					else
+						Content_Open_Holder = utility:RenderObject("Frame", {
+							BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+							BackgroundTransparency = 1,
+							BorderColor3 = Color3.fromRGB(0, 0, 0),
+							BorderSizePixel = 0,
+							Parent = Content.Section.Extra,
+							Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
+							Size = UDim2.new(1, -98, 0, MaxHeight),
+							ZIndex = 6
+						})
+					end
 					-- //
 					local Open_Holder_Outline = utility:RenderObject("Frame", {
 						BackgroundColor3 = Color3.fromRGB(12, 12, 12),
@@ -1527,7 +1542,7 @@ end
 								local AbsSizeX = Content_Open_Holder.AbsoluteSize.X
 								local AbsSizeY = Content_Open_Holder.AbsoluteSize.Y
 								--
-								-- Добавляем проверку клика по опциям
+								-- Проверяем клик по опциям
 								local clickedOption = false
 								for _, option in pairs(Open) do
 									local btn = option[5]
