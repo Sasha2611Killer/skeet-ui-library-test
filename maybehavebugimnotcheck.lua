@@ -1739,7 +1739,7 @@ end
 							BorderSizePixel = 0,
 							Parent = Content.Section.Extra,
 							Position = UDim2.new(0, Content_Holder_Outline.AbsolutePosition.X - Content.Section.Extra.AbsolutePosition.X, 0, Content_Holder_Outline.AbsolutePosition.Y - Content.Section.Extra.AbsolutePosition.Y + 21),
-							Size = UDim2.new(1, -98, 0, (1 * #Content.Options) + 2),
+							Size = UDim2.new(1, -98, 0, (18 * #Content.Options) + 2),
 							ZIndex = 6
 						})
 						-- //
