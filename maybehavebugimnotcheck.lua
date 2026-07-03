@@ -2792,19 +2792,19 @@ end
 						if Content.Content.Open and Input.UserInputType == Enum.UserInputType.MouseButton1 then
 							local Mouse = utility:MouseLocation()
 
-							-- Проверяем клик по палитре (с отступом сверху 36 + 18)
+							-- Проверяем клик по палитре
 							local onPalette = Mouse.X >= Content_Open_Holder.AbsolutePosition.X and 
 								Mouse.Y >= (Content_Open_Holder.AbsolutePosition.Y + 36 + (36/2)) and 
 								Mouse.X <= Content_Open_Holder.AbsolutePosition.X + Content_Open_Holder.AbsoluteSize.X and 
 								Mouse.Y <= Content_Open_Holder.AbsolutePosition.Y + Content_Open_Holder.AbsoluteSize.Y + 36 + (36/2)
 
-							-- Проверяем клик по кнопке Colorpicker
+							-- Проверяем клик по кнопке Colorpicker (игнорируем)
 							local onButton = Mouse.X >= Content_Holder_Button.AbsolutePosition.X and 
 								Mouse.Y >= Content_Holder_Button.AbsolutePosition.Y and 
 								Mouse.X <= Content_Holder_Button.AbsolutePosition.X + Content_Holder_Button.AbsoluteSize.X and 
 								Mouse.Y <= Content_Holder_Button.AbsolutePosition.Y + Content_Holder_Button.AbsoluteSize.Y
 
-							-- Если клик НЕ по палитре И НЕ по кнопке
+							-- Закрываем ТОЛЬКО если клик НЕ по палитре И НЕ по кнопке
 							if not onPalette and not onButton then
 								Content.Section:CloseContent()
 							end
