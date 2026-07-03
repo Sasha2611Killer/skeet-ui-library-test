@@ -2802,13 +2802,7 @@ end
 			end
 			--
 			do -- // Connections
-				utility:CreateConnection(Content_Holder_Button.MouseButton1Click, function(Input)
-					if Content.Content.Open then
-						Content.Section:CloseContent()
-					else
-						Content:Open()
-					end
-				end)
+				
 				--
 				utility:CreateConnection(Content_Holder_Button.MouseEnter, function(Input)
 					Outline_Frame_Gradient.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255), Color3.fromRGB(180, 180, 180))
