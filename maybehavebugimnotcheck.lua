@@ -1985,7 +1985,7 @@ end
 			return Content
 		end
 		--
-	lua
+	
 	function sections:CreateKeybind(Properties)
 		Properties = Properties or {}
 		--
